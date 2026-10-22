@@ -1,44 +1,78 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Cotizador.css'
 
-// Presets de impresoras: consumo en watts y costo por hora (energía + desgaste)
+// Presets de impresoras: consumo en watts y costo por hora, medio inventado la verdad jajajaja
 const impresoras = [
   { id: 'bambu-x1c', nombre: 'Bambu Lab X1C', watts: 350, costoHora: 4 },
   { id: 'prusa-mk4', nombre: 'Prusa MK4', watts: 240, costoHora: 3 },
   { id: 'ender-3-v3', nombre: 'Creality Ender 3 V3', watts: 270, costoHora: 2.5 },
+  { id: 'bambu-a1', nombre: 'Bambu Lab A1', watts: 290, costoHora: 3.2 },
 ]
 
-// Valores de ejemplo para ver el desglose. En el Avance 4 se calculan con useState
-const desglose = [
-  { concepto: 'Filamento', monto: 30 },
-  { concepto: 'Energía / Uso', monto: 18 },
-]
-const costoTotal = 48
-const ganancia = 24
-const precioVenta = 72
+// Los valores se guardan como texto para que el usuario pueda borrar un campo
+const valoresIniciales = {
+  impresora: 'bambu-a1',
+  costoRollo: '400',
+  peso: '75',
+  tiempo: '4.5',
+  ganancia: '50',
+}
+
+// Campo vacío o negativo cuenta como 0
+const aNumero = (valor) => Math.max(Number(valor) || 0, 0)
 
 const formatoMoneda = (monto) => `$${monto.toFixed(2)} MXN`
 
 function Cotizador() {
+  const navigate = useNavigate()
+  const [datos, setDatos] = useState(valoresIniciales)
+
+  // Un solo manejador para todos los campos: el atributo name dice cuál cambió
+  const handleChange = (evento) => {
+    const { name, value } = evento.target
+    setDatos({ ...datos, [name]: value })
+  }
+
+  // Fórmulas
+  const impresora = impresoras.find((item) => item.id === datos.impresora)
+  const porcentaje = aNumero(datos.ganancia)
+  const costoFilamento = (aNumero(datos.peso) / 1000) * aNumero(datos.costoRollo)
+  const costoOperativo = aNumero(datos.tiempo) * impresora.costoHora
+  const costoTotal = costoFilamento + costoOperativo
+  const precioVenta = costoTotal * (1 + porcentaje / 100)
+  const gananciaNeta = precioVenta - costoTotal
+
+  // El título de la pestaña muestra el precio actual; al salir vuelve al original
+  useEffect(() => {
+    document.title = `${formatoMoneda(precioVenta)} | 3DPrintQuote`
+    return () => {
+      document.title = '3DPrintQuote'
+    }
+  }, [precioVenta])
+
   return (
     <div className="cotizador">
       <nav className="cotizador-barra">
-        {/* Igual que en Inicio, el regreso se conecta con React Router en el Avance 4 */}
-        <button type="button" className="cotizador-volver">
+        <button
+          type="button"
+          className="cotizador-volver"
+          onClick={() => navigate('/')}
+        >
           &lt; Volver al Inicio
         </button>
       </nav>
 
       <main className="cotizador-contenido">
-        <form className="cotizador-formulario">
+        <form className="cotizador-formulario" onSubmit={(e) => e.preventDefault()}>
           <h1>Formulario de entrada</h1>
 
           <label className="campo">
             Impresora
-            <select name="impresora" defaultValue="bambu-x1c">
-              {impresoras.map((impresora) => (
-                <option key={impresora.id} value={impresora.id}>
-                  {impresora.nombre} ({impresora.watts} W · $
-                  {impresora.costoHora.toFixed(2)}/h)
+            <select name="impresora" value={datos.impresora} onChange={handleChange}>
+              {impresoras.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.nombre} ({item.watts} W · ${item.costoHora.toFixed(2)}/h)
                 </option>
               ))}
             </select>
@@ -46,22 +80,47 @@ function Cotizador() {
 
           <label className="campo">
             Costo del rollo ($/kg)
-            <input type="number" name="costoRollo" min="0" defaultValue="400" />
+            <input
+              type="number"
+              name="costoRollo"
+              min="0"
+              value={datos.costoRollo}
+              onChange={handleChange}
+            />
           </label>
 
           <label className="campo">
             Peso de la pieza (g)
-            <input type="number" name="peso" min="0" defaultValue="75" />
+            <input
+              type="number"
+              name="peso"
+              min="0"
+              value={datos.peso}
+              onChange={handleChange}
+            />
           </label>
 
           <label className="campo">
             Tiempo de impresión (horas)
-            <input type="number" name="tiempo" min="0" step="0.1" defaultValue="4.5" />
+            <input
+              type="number"
+              name="tiempo"
+              min="0"
+              step="0.1"
+              value={datos.tiempo}
+              onChange={handleChange}
+            />
           </label>
 
           <label className="campo">
             Ganancia (%)
-            <input type="number" name="ganancia" min="0" defaultValue="50" />
+            <input
+              type="number"
+              name="ganancia"
+              min="0"
+              value={datos.ganancia}
+              onChange={handleChange}
+            />
           </label>
         </form>
 
@@ -69,12 +128,15 @@ function Cotizador() {
           <h2>Desglose de cotización</h2>
 
           <dl>
-            {desglose.map((fila) => (
-              <div key={fila.concepto} className="fila">
-                <dt>{fila.concepto}</dt>
-                <dd>{formatoMoneda(fila.monto)}</dd>
-              </div>
-            ))}
+            <div className="fila">
+              <dt>Filamento</dt>
+              <dd>{formatoMoneda(costoFilamento)}</dd>
+            </div>
+
+            <div className="fila">
+              <dt>Energía / Uso</dt>
+              <dd>{formatoMoneda(costoOperativo)}</dd>
+            </div>
 
             <div className="fila fila-total">
               <dt>Costo total</dt>
@@ -82,8 +144,8 @@ function Cotizador() {
             </div>
 
             <div className="fila">
-              <dt>Ganancia (50%)</dt>
-              <dd>{formatoMoneda(ganancia)}</dd>
+              <dt>Ganancia ({porcentaje}%)</dt>
+              <dd>{formatoMoneda(gananciaNeta)}</dd>
             </div>
 
             <div className="fila fila-precio">

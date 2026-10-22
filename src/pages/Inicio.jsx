@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
+import logo from '../assets/logo.svg'
 import './Inicio.css'
 
 const beneficios = [
@@ -8,10 +10,12 @@ const beneficios = [
 ]
 
 function Inicio() {
+  const navigate = useNavigate()
+
   return (
     <main className="inicio">
       <header className="inicio-encabezado">
-        <span className="inicio-logo" aria-hidden="true">🖨️</span>
+        <img className="inicio-logo" src={logo} alt="Logo de 3DPrintQuote" />
         <h1>¡Bienvenido a 3DPrintQuote!</h1>
         <p>
           Calcula costos reales de impresión y define tu margen de ganancia
@@ -28,8 +32,11 @@ function Inicio() {
         </ul>
       </section>
 
-      {/* La navegación al cotizador se conecta en el Avance 4 con React Router */}
-      <button type="button" className="inicio-boton">
+      <button
+        type="button"
+        className="inicio-boton"
+        onClick={() => navigate('/cotizador')}
+      >
         Iniciar Cotización
       </button>
     </main>

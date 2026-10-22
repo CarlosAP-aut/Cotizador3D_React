@@ -8,7 +8,7 @@
   margin: 0 auto 24px;
 }
 
-/* Botón secundario: solo borde, para que no compita con el naranja del formulario */
+/* Botón secundario: solo borde*/
 .cotizador-volver {
   padding: 8px 16px;
   border: 1px solid var(--texto-secundario);
@@ -26,7 +26,7 @@
   color: var(--acento);
 }
 
-/* Dos columnas con Flexbox; en pantallas chicas se acomodan una debajo de otra */
+/* Dos columnas con Flexbox*/
 .cotizador-contenido {
   display: flex;
   flex-wrap: wrap;
@@ -79,7 +79,6 @@
   border-color: var(--acento);
 }
 
-/* La tarjeta se queda fija al hacer scroll, como una tarjeta flotante */
 .cotizador-desglose {
   position: sticky;
   top: 24px;
@@ -103,7 +102,7 @@
   color: var(--texto-secundario);
 }
 
-/* Los montos van alineados a la derecha, como pide el documento de diseño */
+/* para que los montos van alineados a la derecha */
 .fila dd {
   text-align: right;
   font-variant-numeric: tabular-nums;
