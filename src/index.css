@@ -1,0 +1,24 @@
+/* Paleta y tipografía del documento de diseño (Avance 1) */
+:root {
+  --fondo: #1e1e2e;
+  --tarjeta: #2a2a3c;
+  --acento: #ff6b00;
+  --resultado: #00e676;
+  --texto: #ffffff;
+  --texto-secundario: #a5a5b5;
+
+  font-family: 'Inter', 'Roboto', system-ui, sans-serif;
+  font-size: 16px;
+  color: var(--texto);
+  background-color: var(--fondo);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}

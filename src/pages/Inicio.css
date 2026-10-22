@@ -1,0 +1,88 @@
+/* Columna centrada con Flexbox, tanto vertical como horizontal */
+.inicio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  min-height: 100vh;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.inicio-encabezado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.inicio-logo {
+  font-size: 64px;
+}
+
+.inicio-encabezado h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.inicio-encabezado p {
+  font-size: 16px;
+  color: var(--texto-secundario);
+}
+
+.inicio-tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+  padding: 24px;
+  border-radius: 12px;
+  background-color: var(--tarjeta);
+  text-align: left;
+}
+
+.inicio-tarjeta h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.inicio-tarjeta ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+/* Viñeta naranja hecha con un pseudo-elemento */
+.inicio-tarjeta li {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--texto-secundario);
+}
+
+.inicio-tarjeta li::before {
+  content: '✔';
+  color: var(--acento);
+}
+
+.inicio-boton {
+  padding: 14px 40px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--acento);
+  color: var(--texto);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+}
+
+.inicio-boton:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
