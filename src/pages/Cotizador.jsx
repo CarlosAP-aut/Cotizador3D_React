@@ -19,6 +19,15 @@ const valoresIniciales = {
   ganancia: '50',
 }
 
+// Al limpiar se borran los números y la impresora vuelve a la de inicio
+const valoresVacios = {
+  impresora: valoresIniciales.impresora,
+  costoRollo: '',
+  peso: '',
+  tiempo: '',
+  ganancia: '',
+}
+
 // Campo vacío o negativo cuenta como 0
 const aNumero = (valor) => Math.max(Number(valor) || 0, 0)
 
@@ -33,6 +42,8 @@ function Cotizador() {
     const { name, value } = evento.target
     setDatos({ ...datos, [name]: value })
   }
+
+  const limpiar = () => setDatos(valoresVacios)
 
   // Fórmulas
   const impresora = impresoras.find((item) => item.id === datos.impresora)
@@ -122,6 +133,10 @@ function Cotizador() {
               onChange={handleChange}
             />
           </label>
+
+          <button type="button" className="cotizador-limpiar" onClick={limpiar}>
+            Limpiar
+          </button>
         </form>
 
         <aside className="cotizador-desglose">

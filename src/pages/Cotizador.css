@@ -9,7 +9,8 @@
 }
 
 /* Botón secundario: solo borde*/
-.cotizador-volver {
+.cotizador-volver,
+.cotizador-limpiar {
   padding: 8px 16px;
   border: 1px solid var(--texto-secundario);
   border-radius: 8px;
@@ -21,9 +22,15 @@
   cursor: pointer;
 }
 
-.cotizador-volver:hover {
+.cotizador-volver:hover,
+.cotizador-limpiar:hover {
   border-color: var(--acento);
   color: var(--acento);
+}
+
+/* Limpiar va al final del formulario, pegado a la derecha */
+.cotizador-limpiar {
+  align-self: flex-end;
 }
 
 /* Dos columnas con Flexbox*/
